@@ -1,0 +1,1 @@
+https://oleksandr81.github.io/picture-art/dist/
