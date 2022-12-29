@@ -2,6 +2,114 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/js/modules/forms.js":
+/*!*********************************!*\
+  !*** ./src/js/modules/forms.js ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const forms = () => {
+  const form = document.querySelectorAll('form'),
+    input = document.querySelectorAll('input'),
+    upload = document.querySelectorAll('[name="upload"]');
+  const message = {
+    loading: 'loading..',
+    success: 'success',
+    error: 'error..',
+    spinner: 'assets/img/spinner.gif',
+    ok: 'assets/img/ok.png',
+    fail: 'assets/img/fail.png'
+  };
+  const path = {
+    designer: 'assets/server.php',
+    question: 'assets/question.php'
+  };
+  const postData = async (url, data) => {
+    let res = await fetch(url, {
+      method: 'POST',
+      body: data
+    });
+    return await res.text();
+  };
+  const clearInput = () => {
+    input.forEach(item => {
+      item.value = '';
+    });
+    upload.forEach(item => {
+      item.previousElementSibling.textContent = "Файл не выбран";
+    });
+  };
+  upload.forEach(item => {
+    item.addEventListener('input', () => {
+      const statusUploadText = item.previousElementSibling;
+      if (item.files[0]) {
+        statusUploadText.textContent = moderateFileName(item.files[0].name);
+      }
+    });
+  });
+  function moderateFileName(fileName) {
+    let arr = fileName.split("."),
+      newArr = [];
+    for (let j of arr) {
+      if (j.length > 7) {
+        newArr.push(j.slice(0, 7) + '..');
+      } else {
+        newArr.push(j);
+      }
+    }
+    return newArr.join(".");
+  }
+  form.forEach(item => {
+    item.addEventListener('submit', e => {
+      e.preventDefault();
+      let messageBlock = document.createElement('div');
+      messageBlock.classList.add('status');
+      messageBlock.style.textAlign = 'center';
+      item.parentNode.append(messageBlock);
+      item.classList.add('animated', 'fadeOutUp');
+      setTimeout(() => {
+        item.style.display = 'none';
+      }, 400);
+      let statusMessImg = document.createElement('img');
+      statusMessImg.setAttribute('src', message.spinner);
+      statusMessImg.classList.add('animated', 'fadeInUp');
+      messageBlock.append(statusMessImg);
+      let textMessage = document.createElement('div');
+      textMessage.textContent = message.loading;
+      messageBlock.append(textMessage);
+      const formData = new FormData(item);
+      let api;
+      item.closest('popup-design') || item.classList.contains('form-upload') ? api = path.designer : api = path.question;
+      console.log(api);
+      postData(api, formData).then(res => {
+        console.log(res);
+        statusMessImg.setAttribute('src', message.ok);
+        textMessage.textContent = message.success;
+      }).catch(() => {
+        statusMessImg.setAttribute('src', message.fail);
+        textMessage.textContent = message.error;
+      }).finally(() => {
+        clearInput();
+        setTimeout(() => {
+          textMessage.remove();
+          statusMessImg.remove();
+          console.log('hello');
+          item.style.display = 'block';
+          item.classList.remove('fadeOutUp');
+          item.classList.add('fadeInUp');
+        }, 2000);
+      });
+    });
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (forms);
+
+/***/ }),
+
 /***/ "./src/js/modules/modals.js":
 /*!**********************************!*\
   !*** ./src/js/modules/modals.js ***!
@@ -226,12 +334,15 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_modals__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/modals */ "./src/js/modules/modals.js");
 /* harmony import */ var _modules_slider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/slider */ "./src/js/modules/slider.js");
+/* harmony import */ var _modules_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/forms */ "./src/js/modules/forms.js");
+
 
 
 window.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   (0,_modules_modals__WEBPACK_IMPORTED_MODULE_0__["default"])();
+  (0,_modules_forms__WEBPACK_IMPORTED_MODULE_2__["default"])();
   (0,_modules_slider__WEBPACK_IMPORTED_MODULE_1__["default"])('.feedback-slider-item', 'horizontal', '.main-prev-btn', '.main-next-btn');
   (0,_modules_slider__WEBPACK_IMPORTED_MODULE_1__["default"])('.main-slider-item', 'vertical');
 });

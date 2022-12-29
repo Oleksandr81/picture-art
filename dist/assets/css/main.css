@@ -232,6 +232,7 @@ h4 {
 }
 .main .file_upload > div {
   padding-left: 1em;
+  padding-top: 1em;
   /* example */
 
 }
@@ -555,8 +556,7 @@ h4 {
   height: 4em;
   /* example */
 
-  line-height: 2em /* the same as height */
-;
+  line-height: 2em; /* the same as height */
 }
 .calc .file_upload > button {
   float: right;
@@ -566,8 +566,8 @@ h4 {
   height: 100%;
 }
 .calc .file_upload > div {
-  padding-left: 1em /* example */
-;
+  padding-left: 1em /* example */;
+  padding-top: 1em;
 }
 .calc .file_upload input[type=file] {
   position: absolute;
@@ -1258,6 +1258,7 @@ h4 {
   transform: translateX(-50%) !important;
   padding: 3rem 6rem 4rem 6rem;
 }
+
 @media (max-width: 1399px) {
   .paints {
     display: none;
