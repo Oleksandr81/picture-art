@@ -1,4 +1,6 @@
-const forms = () => {
+import { postData } from "../services/requests";
+
+const forms = (state) => {
   const form = document.querySelectorAll('form'),
     input = document.querySelectorAll('input'),
     upload = document.querySelectorAll('[name="upload"]');
@@ -15,15 +17,6 @@ const forms = () => {
   const path = {
     designer: 'assets/server.php',
     question: 'assets/question.php'
-  };
-
-  const postData = async (url, data) => {
-    let res = await fetch(url, {
-      method: 'POST',
-      body: data
-    });
-
-    return await res.text();
   };
 
   const clearInput = () => {
@@ -85,6 +78,13 @@ const forms = () => {
       messageBlock.append(textMessage);
 
       const formData = new FormData(item);
+      if (item.getAttribute('data-calc') === 'end') {
+        for (let key in state) {
+          formData.append(key, state[key]);
+        }
+      }
+      state = {};   
+
       let api;
       item.closest('popup-design') || item.classList.contains('form-upload') ? api = path.designer : api = path.question;
       console.log(api);
@@ -104,12 +104,12 @@ const forms = () => {
           setTimeout(() => {
             textMessage.remove();
             statusMessImg.remove();
-            console.log('hello');
-            
+
             item.style.display = 'block';
             item.classList.remove('fadeOutUp');
             item.classList.add('fadeInUp');
           }, 2000);
+          // state = {};
         });
     });
   });

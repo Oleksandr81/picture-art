@@ -32,8 +32,10 @@ const slider = (slidesSelector, dir, prev, next) => {
       plusSlide(1);
       
       if (dir === 'horizontal') {
-        slides[slideIndex].classList.add('slideInRight');
-        slides[slideIndex].classList.remove('slideInLeft');
+        slides[slideIndex].classList.add('fadeIn');
+        
+        // slides[slideIndex].classList.add('slideInRight');
+        // slides[slideIndex].classList.remove('slideInLeft');
       } else {
         slides[slideIndex].classList.add('slideInDown');
       }
